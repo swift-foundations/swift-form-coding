@@ -103,8 +103,7 @@ Both underlying packages support optional URLRouting integration via Swift Packa
 dependencies: [
     .package(
         url: "https://github.com/coenttb/swift-form-coding",
-        from: "0.1.0",
-        traits: ["URLRouting"]  // Enable URLRouting trait
+        from: "0.1.0"
     )
 ]
 ```
