@@ -35,10 +35,10 @@ let package = Package(
 #if swift(>=6.1) && swift(<6.3)
 // workaround for error:
 // error: exhausted attempts to resolve the dependencies graph, with the following dependencies unresolved:
-// * 'swift-rfc-7578' from https://github.com/swift-standards/swift-rfc-7578.git
+// * 'swift-rfc-7578' from https://github.com/swift-ietf/swift-rfc-7578.git
 // * 'swift-url-routing' from https://github.com/pointfreeco/swift-url-routing
 package.dependencies.append(contentsOf: [
-    .package(url: "https://github.com/swift-standards/swift-rfc-7578", from: "0.1.0"),
+    .package(url: "https://github.com/swift-ietf/swift-rfc-7578", from: "0.1.0"),
     .package(url: "https://github.com/pointfreeco/swift-url-routing", from: "0.1.0")
 ])
 #endif
