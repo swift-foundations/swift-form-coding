@@ -1,21 +1,23 @@
-// swift-tools-version:6.1
+// swift-tools-version: 6.3.1
 
 import PackageDescription
 
 let package = Package(
     name: "swift-form-coding",
     platforms: [
-        .macOS(.v14),
-        .iOS(.v17),
-        .tvOS(.v17),
-        .watchOS(.v10)
+        .macOS(.v26),
+        .iOS(.v26),
+        .tvOS(.v26),
+        .watchOS(.v26)
     ],
     products: [
         .library(name: "FormCoding", targets: ["FormCoding"])
     ],
     dependencies: [
-        .package(url: "https://github.com/coenttb/swift-url-form-coding", from: "0.1.0"),
-        .package(url: "https://github.com/coenttb/swift-multipart-form-coding", from: "0.1.0")
+        .package(url: "https://github.com/swift-foundations/swift-url-form-coding.git", branch: "main"),
+        .package(url: "https://github.com/swift-foundations/swift-multipart-form-coding.git", branch: "main"),
+        .package(url: "https://github.com/swift-ietf/swift-rfc-7578", branch: "main"),
+        .package(url: "https://github.com/swift-foundations/swift-url-routing.git", from: "0.1.0")
     ],
     targets: [
         .target(
@@ -31,19 +33,6 @@ let package = Package(
         )
     ]
 )
-
-#if swift(>=6.1) && swift(<6.3)
-// workaround for error:
-// error: exhausted attempts to resolve the dependencies graph, with the following dependencies unresolved:
-// * 'swift-rfc-7578' from https://github.com/swift-ietf/swift-rfc-7578.git
-// * 'swift-url-routing' from https://github.com/pointfreeco/swift-url-routing
-package.dependencies.append(contentsOf: [
-    .package(url: "https://github.com/swift-ietf/swift-rfc-7578", from: "0.1.0"),
-    .package(url: "https://github.com/pointfreeco/swift-url-routing", from: "0.1.0")
-])
-#endif
-
-
 
 for target in package.targets {
     target.swiftSettings?.append(
