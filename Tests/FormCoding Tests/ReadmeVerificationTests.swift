@@ -1,12 +1,22 @@
 import Testing
 import Foundation
 @testable import FormCoding
+import URLFormCoding
+import WHATWG_HTML_Forms
+import WHATWG_HTML_FormData
+import RFC_2045
+import RFC_2046
 
 @Suite("README Verification")
 struct ReadmeVerificationTests {
 
     @Test("Example from README: URL Form Encoding")
     func urlFormEncoding() throws {
+        // `Form` is qualified locally: this file also imports the WHATWG
+        // form-data model, whose top-level `Form` type would otherwise clash
+        // with `URLFormCoding.Form`.
+        typealias Form = URLFormCoding.Form
+
         // URL Form Encoding
         struct LoginForm: Codable {
             let username: String
@@ -27,19 +37,45 @@ struct ReadmeVerificationTests {
         #expect(decoded.password == "secret")
     }
 
-    @Test("Example from README: Multipart File Upload")
-    func multipartFileUpload() throws {
-        // Multipart File Upload
-        let imageUpload = try Multipart.FileUpload(
-            fieldName: "avatar",
-            filename: "profile.jpg",
-            fileType: .image(.jpeg),
-            maxSize: 5 * 1024 * 1024
+    @Test("Example from README: Multipart Form Data")
+    func multipartFormData() throws {
+        // `Form` here is the WHATWG HTML form-data model; qualified locally to
+        // avoid the name clash with `URLFormCoding.Form` in this test file.
+        typealias Form = WHATWG_HTML_Forms.Form
+
+        let pngBytes: [UInt8] = [0x89, 0x50, 0x4E, 0x47]  // PNG signature
+
+        // Build the form-data set: a text field plus a file field
+        var form = Form.Data.Entry.List()
+        form.append(name: "username", value: "alice")
+        form.append(
+            name: "avatar",
+            file: Form.Data.File(
+                name: "avatar.png",
+                type: "image/png",
+                body: pngBytes
+            )
         )
 
-        // Verify properties
-        #expect(imageUpload.fieldName == "avatar")
-        #expect(imageUpload.filename == "profile.jpg")
-        #expect(imageUpload.maxSize == 5 * 1024 * 1024)
+        // Encode as multipart/form-data (RFC 7578)
+        let multipart = try RFC_2046.Multipart(form)
+
+        // Content-Type header (with a generated boundary) for the request
+        let (contentType, boundary) = form.multipartContentType()
+
+        // Verify the form-data set
+        #expect(form.count == 2)
+        #expect(form.first(named: "username")?.stringValue == "alice")
+        #expect(form.first(named: "avatar")?.fileValue?.name == "avatar.png")
+        #expect(form.first(named: "avatar")?.fileValue?.type == "image/png")
+        #expect(form.first(named: "avatar")?.fileValue?.body == pngBytes)
+
+        // Verify the encoded multipart body
+        #expect(multipart.parts.count == 2)
+
+        // Verify the derived Content-Type header
+        #expect(!boundary.rawValue.isEmpty)
+        #expect(contentType.headerValue.contains("multipart/form-data"))
+        #expect(contentType.boundary == boundary.rawValue)
     }
 }

@@ -43,10 +43,11 @@ Then add the product to your target:
 
 ## Usage
 
+### URL Form Encoding
+
 ```swift
 import FormCoding
 
-// URL Form Encoding
 struct LoginForm: Codable {
     let username: String
     let password: String
@@ -56,14 +57,38 @@ let encoder = Form.Encoder()
 let form = LoginForm(username: "john", password: "secret")
 let formData = try encoder.encode(form)
 // Result: "username=john&password=secret"
+```
 
-// Multipart File Upload
-let imageUpload = Multipart.FileUpload(
-    fieldName: "avatar",
-    filename: "profile.jpg",
-    fileType: .image(.jpeg),
-    maxSize: 5 * 1024 * 1024
+### Multipart Form Data
+
+Build a `multipart/form-data` body (RFC 7578) from the WHATWG HTML form-data
+model, encode it, and derive the `Content-Type` header for your HTTP request.
+
+<!-- FileUpload example returns with the url-routing RFC-first rewrite (routing arc) -->
+
+```swift
+import MultipartFormCoding
+import WHATWG_HTML_FormData   // Form.Data.Entry.List, Form.Data.File
+import RFC_2046               // RFC_2046.Multipart
+
+// Build the form-data set: a text field plus a file field
+var form = Form.Data.Entry.List()
+form.append(name: "username", value: "alice")
+form.append(
+    name: "avatar",
+    file: Form.Data.File(
+        name: "avatar.png",
+        type: "image/png",
+        body: pngBytes           // [UInt8]
+    )
 )
+
+// Encode as multipart/form-data (RFC 7578)
+let multipart = try RFC_2046.Multipart(form)
+
+// Content-Type header (with a generated boundary) for the request
+let (contentType, boundary) = form.multipartContentType()
+// contentType.headerValue == "multipart/form-data; boundary=----FormBoundary…"
 ```
 
 ## When to Use Each Package

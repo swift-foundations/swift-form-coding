@@ -17,7 +17,7 @@ let package = Package(
         .package(url: "https://github.com/swift-foundations/swift-url-form-coding.git", branch: "main"),
         .package(url: "https://github.com/swift-foundations/swift-multipart-form-coding.git", branch: "main"),
         .package(url: "https://github.com/swift-ietf/swift-rfc-7578.git", branch: "main"),
-        .package(url: "https://github.com/swift-foundations/swift-url-routing.git", from: "0.1.0")
+        .package(url: "https://github.com/swift-foundations/swift-url-routing.git", from: "0.6.0")  // Institute fork URL (principal ruling 2026-07-09); pinned to upstream-identical tags (0.6.2 = pointfree release SHA); do NOT use branch:main until the RFC-first rewrite lands via the routing arc.
     ],
     targets: [
         .target(
