@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/swift-foundations/swift-url-form-coding.git", branch: "main"),
         .package(url: "https://github.com/swift-foundations/swift-multipart-form-coding.git", branch: "main"),
-        .package(url: "https://github.com/swift-ietf/swift-rfc-7578", branch: "main"),
+        .package(url: "https://github.com/swift-ietf/swift-rfc-7578.git", branch: "main"),
         .package(url: "https://github.com/swift-foundations/swift-url-routing.git", from: "0.1.0")
     ],
     targets: [
