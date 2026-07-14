@@ -1,11 +1,12 @@
-import Testing
 import Foundation
-@testable import FormCoding
-import URLFormCoding
-import WHATWG_HTML_Forms
-import WHATWG_HTML_FormData
 import RFC_2045
 import RFC_2046
+import Testing
+import URLFormCoding
+import WHATWG_HTML_FormData
+import WHATWG_HTML_Forms
+
+@testable import FormCoding
 
 @Suite("README Verification")
 struct ReadmeVerificationTests {
