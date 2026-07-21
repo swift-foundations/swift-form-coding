@@ -15,9 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swift-foundations/swift-url-form-coding.git", branch: "main"),
-        .package(url: "https://github.com/swift-foundations/swift-multipart-form-coding.git", branch: "main"),
-        .package(url: "https://github.com/swift-ietf/swift-rfc-7578.git", branch: "main"),
-        .package(url: "https://github.com/swift-foundations/swift-url-routing.git", branch: "main")
+        .package(url: "https://github.com/swift-foundations/swift-multipart-form-coding.git", branch: "main")
     ],
     targets: [
         .target(
@@ -35,16 +33,7 @@ let package = Package(
 )
 
 for target in package.targets {
-    target.swiftSettings?.append(
-        contentsOf: [
-            .enableUpcomingFeature("MemberImportVisibility")
-        ]
-    )
+    target.swiftSettings = (target.swiftSettings ?? []) + [
+        .enableUpcomingFeature("MemberImportVisibility")
+    ]
 }
-
-//package.traits.insert(
-//    .default(
-//        enabledTraits: ["URLRouting"]
-//    )
-//)
-
