@@ -1,0 +1,8 @@
+# .github/metadata.yaml
+description: "Umbrella re-exporting URL-encoded and multipart form coding for Swift."
+topics:
+  - foundations
+  - form-coding
+homepage: "https://swift-institute.org"
+readme:
+  family: E
