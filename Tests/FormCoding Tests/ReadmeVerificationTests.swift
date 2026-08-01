@@ -9,10 +9,15 @@ import WHATWG_HTML_Forms
 @testable import FormCoding
 
 @Suite("README Verification")
-struct ReadmeVerificationTests {
+struct `Readme Verification Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+}
 
+extension `Readme Verification Tests`.Integration {
     @Test("Example from README: URL Form Encoding")
-    func urlFormEncoding() throws {
+    func `url form encoding`() throws {
         // `Form` is qualified locally: this file also imports the WHATWG
         // form-data model, whose top-level `Form` type would otherwise clash
         // with `URLFormCoding.Form`.
@@ -39,7 +44,7 @@ struct ReadmeVerificationTests {
     }
 
     @Test("Example from README: Multipart Form Data")
-    func multipartFormData() throws {
+    func `multipart form data`() throws {
         // `Form` here is the WHATWG HTML form-data model; qualified locally to
         // avoid the name clash with `URLFormCoding.Form` in this test file.
         typealias Form = WHATWG_HTML_Forms.Form
