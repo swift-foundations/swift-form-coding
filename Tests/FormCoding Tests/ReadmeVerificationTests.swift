@@ -9,7 +9,7 @@ import WHATWG_HTML_Forms
 
 @testable import FormCoding
 
-@Suite("README Verification")
+@Suite
 struct `Readme Verification Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
@@ -17,8 +17,8 @@ struct `Readme Verification Tests` {
 }
 
 extension `Readme Verification Tests`.Integration {
-    @Test("Example from README: URL Form Encoding")
-    func `url form encoding`() throws {
+    @Test
+    func `url form encoding example from README`() throws {
         // URL Form Encoding
         struct LoginForm: Codable {
             let username: String
@@ -39,8 +39,8 @@ extension `Readme Verification Tests`.Integration {
         #expect(decoded.password == "secret")
     }
 
-    @Test("Example from README: Multipart Form Data")
-    func `multipart form data`() throws {
+    @Test
+    func `multipart form data example from README`() throws {
         // `Form` here is the WHATWG HTML form-data model.
         typealias Form = WHATWG_HTML_Forms.Form
 
@@ -58,11 +58,12 @@ extension `Readme Verification Tests`.Integration {
             )
         )
 
-        // Encode as multipart/form-data (RFC 7578)
-        let multipart = try RFC_2046.Multipart(form)
+        // Encode as multipart/form-data (RFC 7578) with a generated boundary
+        let boundary = RFC_2046.Boundary.random()
+        let multipart = try form.multipart(boundary: boundary)
 
-        // Content-Type header (with a generated boundary) for the request
-        let (contentType, boundary) = form.multipartContentType()
+        // Content-Type header (with the boundary) for the request
+        let contentType = multipart.contentType
 
         // Verify the form-data set
         #expect(form.count == 2)

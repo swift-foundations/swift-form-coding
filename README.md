@@ -83,12 +83,13 @@ form.append(
     )
 )
 
-// Encode as multipart/form-data (RFC 7578)
-let multipart = try RFC_2046.Multipart(form)
+// Encode as multipart/form-data (RFC 7578) with a generated boundary
+let boundary = RFC_2046.Boundary.random()
+let multipart = try form.multipart(boundary: boundary)
 
-// Content-Type header (with a generated boundary) for the request
-let (contentType, boundary) = form.multipartContentType()
-// contentType.headerValue == "multipart/form-data; boundary=----FormBoundary…"
+// Content-Type header (with the boundary) for the request
+let contentType = multipart.contentType
+// contentType.headerValue == "multipart/form-data; boundary=…"
 ```
 
 ## When to Use Each Package
