@@ -1,4 +1,5 @@
 import Foundation
+import HTML_Standard
 import RFC_2045
 import RFC_2046
 import Testing
@@ -18,18 +19,13 @@ struct `Readme Verification Tests` {
 extension `Readme Verification Tests`.Integration {
     @Test("Example from README: URL Form Encoding")
     func `url form encoding`() throws {
-        // `Form` is qualified locally: this file also imports the WHATWG
-        // form-data model, whose top-level `Form` type would otherwise clash
-        // with `URLFormCoding.Form`.
-        typealias Form = URLFormCoding.Form
-
         // URL Form Encoding
         struct LoginForm: Codable {
             let username: String
             let password: String
         }
 
-        let encoder = Form.Encoder()
+        let encoder = HTML.Form.Coder.Encoder()
         let form = LoginForm(username: "john", password: "secret")
         let formData = try encoder.encode(form)
 
@@ -37,7 +33,7 @@ extension `Readme Verification Tests`.Integration {
         #expect(formData.count > 0)
 
         // Verify it can be decoded back
-        let decoder = Form.Decoder()
+        let decoder = HTML.Form.Coder.Decoder()
         let decoded = try decoder.decode(LoginForm.self, from: formData)
         #expect(decoded.username == "john")
         #expect(decoded.password == "secret")
@@ -45,8 +41,7 @@ extension `Readme Verification Tests`.Integration {
 
     @Test("Example from README: Multipart Form Data")
     func `multipart form data`() throws {
-        // `Form` here is the WHATWG HTML form-data model; qualified locally to
-        // avoid the name clash with `URLFormCoding.Form` in this test file.
+        // `Form` here is the WHATWG HTML form-data model.
         typealias Form = WHATWG_HTML_Forms.Form
 
         let pngBytes: [UInt8] = [0x89, 0x50, 0x4E, 0x47]  // PNG signature
