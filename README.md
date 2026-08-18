@@ -53,7 +53,7 @@ struct LoginForm: Codable {
     let password: String
 }
 
-let encoder = Form.Encoder()
+let encoder = HTML.Form.Coder.Encoder()
 let form = LoginForm(username: "john", password: "secret")
 let formData = try encoder.encode(form)
 // Result: "username=john&password=secret"
@@ -135,7 +135,7 @@ dependencies: [
 ```
 
 When the `URLRouting` trait is enabled:
-- `Form.Conversion<T>` and `Multipart.Conversion<T>` conform to `URLRouting.Conversion`
+- `HTML.Form.Coder.Conversion<T>` and `Multipart.Conversion<T>` conform to `URLRouting.Conversion`
 - URLRouting is re-exported for convenient access
 - Convenience methods like `.form(_:)` and `.multipart(_:)` are available
 
